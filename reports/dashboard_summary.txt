@@ -1,0 +1,56 @@
+========================================
+RETAILIQ EXECUTIVE SUMMARY
+========================================
+
+Execution Date:
+2026-06-18 20:44:45.333913
+
+----------------------------------------
+SALES OVERVIEW
+----------------------------------------
+
+Total Units Sold:
+511
+
+Best Selling Product:
+Milk
+
+Worst Selling Product:
+Rice
+
+----------------------------------------
+FORECAST OVERVIEW
+----------------------------------------
+
+Milk: 2135 units
+Bread: 888 units
+Rice: 888 units
+
+----------------------------------------
+HIGH RISK PRODUCTS
+----------------------------------------
+
+Milk
+Bread
+Rice
+
+----------------------------------------
+PURCHASE ORDERS REQUIRED
+----------------------------------------
+
+Milk: 1635 units
+Bread: 788 units
+Rice: 188 units
+
+----------------------------------------
+SYSTEM STATUS
+----------------------------------------
+
+Sales Analysis Completed
+Forecasting Completed
+Risk Analysis Completed
+Reports Generated
+
+========================================
+END OF REPORT
+========================================

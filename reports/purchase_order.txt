@@ -1,0 +1,18 @@
+PURCHASE ORDER REPORT
+==================================================
+
+Product: Milk
+Current Stock: 500
+Predicted Demand: 2135
+Required Purchase: 1635
+----------------------------------------
+Product: Bread
+Current Stock: 100
+Predicted Demand: 888
+Required Purchase: 788
+----------------------------------------
+Product: Rice
+Current Stock: 700
+Predicted Demand: 888
+Required Purchase: 188
+----------------------------------------
