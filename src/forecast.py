@@ -25,3 +25,4 @@ def predicted_demand(forecast, days=30):
     future_predictions = forecast.tail(days)
 
     return round(future_predictions["yhat"].sum())
+

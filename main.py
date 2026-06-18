@@ -65,15 +65,33 @@ from src.email_alert import (
     send_stock_alert,
     send_daily_report
 )
-from src.whatsapp_alert import (
-    send_whatsapp_alert
+
+# Optional imports - WhatsApp alerts
+try:
+    from src.whatsapp_alert import (
+        send_whatsapp_alert
+    )
+except ImportError:
+    send_whatsapp_alert = None
+    print("Warning: pywhatkit not installed. WhatsApp alerts disabled.")
+
+from src.config import (
+    validate_email_config,
+    get_email_config
 )
+
 # ====================================
 # EMAIL CONFIGURATION
 # ====================================
-SENDER_EMAIL = "yaseregspec@gmail.com"
-RECEIVER_EMAIL = "ya3081115@gmail.com"
-APP_PASSWORD = "jsrs migp octq qksi"
+if not validate_email_config():
+    print("\n[ERROR] Email configuration error. Please check your .env file.")
+    print("Copy .env.example to .env and fill in your credentials.")
+    exit(1)
+
+email_config = get_email_config()
+SENDER_EMAIL = email_config["sender_email"]
+RECEIVER_EMAIL = email_config["receiver_email"]
+APP_PASSWORD = email_config["app_password"]
 
 # ====================================
 # LOAD DATA
@@ -140,7 +158,7 @@ if reorders:
 
     for product, qty in reorders.items():
 
-        print(f"{product} → Order {qty} units")
+        print(f"{product} -> Order {qty} units")
 
 else:
 
@@ -217,7 +235,7 @@ for product in products:
     forecast_results[product] = demand
 
     print(
-        f"{product} → {demand} units"
+        f"{product} -> {demand} units"
     )
 
 # ====================================
@@ -369,7 +387,7 @@ print("\nAI RECOMMENDATIONS")
 for recommendation in recommendations:
 
     print(
-        f"• {recommendation}"
+        f"* {recommendation}"
     )
 write_log(
     "Sales data loaded successfully."
@@ -405,7 +423,12 @@ print("=" * 50)
 
 compare_prices()
 
-send_whatsapp_alert(
-    risk_report,
-    "+919952610449"
-)
+# Optional: Send WhatsApp alert if module is available
+if send_whatsapp_alert:
+    try:
+        send_whatsapp_alert(
+            risk_report,
+            "+919952610449"
+        )
+    except Exception as e:
+        print(f"Warning: WhatsApp alert failed: {str(e)}")

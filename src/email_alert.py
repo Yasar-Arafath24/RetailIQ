@@ -75,14 +75,14 @@ def send_stock_alert(
             smtp.send_message(msg)
 
         print(
-            f"✓ Email Alert Sent to {receiver_email}!"
+            f"[SUCCESS] Email Alert Sent to {receiver_email}!"
         )
         
         return True
         
     except Exception as e:
         print(
-            f"✗ Failed to send email: {str(e)}"
+            f"[ERROR] Failed to send email: {str(e)}"
         )
         return False
 
@@ -122,13 +122,13 @@ def send_daily_report(
             smtp.send_message(msg)
 
         print(
-            f"✓ Daily Report Sent to {receiver_email}!"
+            f"[SUCCESS] Daily Report Sent to {receiver_email}!"
         )
         
         return True
         
     except Exception as e:
         print(
-            f"✗ Failed to send report: {str(e)}"
+            f"[ERROR] Failed to send report: {str(e)}"
         )
         return False

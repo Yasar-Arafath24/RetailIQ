@@ -35,11 +35,11 @@ def compare_prices():
         )
 
         print(
-            f"Your Store: ₹{store_price}"
+            f"Your Store: Rs.{store_price}"
         )
 
         print(
-            f"Competitor: ₹{competitor_price}"
+            f"Competitor: Rs.{competitor_price}"
         )
 
         if competitor_price < store_price:

@@ -15,19 +15,29 @@ from src.inventory import (
 from src.forecast import forecast_product, predicted_demand
 from src.stock_predictor import stock_risk_analysis
 from src.email_alert import send_stock_alert
+from src.config import (
+    validate_email_config,
+    get_email_config,
+    CHECK_INTERVAL_SECONDS
+)
 
 # ====================================
 # EMAIL CONFIGURATION
 # ====================================
-SENDER_EMAIL = "yaseregspec@gmail.com"
-RECEIVER_EMAIL = "ya3081115@gmail.com"
-APP_PASSWORD = "jsrs migp octq qksi"
+if not validate_email_config():
+    print("\n[ERROR] Email configuration error. Please check your .env file.")
+    print("Copy .env.example to .env and fill in your credentials.")
+    exit(1)
+
+email_config = get_email_config()
+SENDER_EMAIL = email_config["sender_email"]
+RECEIVER_EMAIL = email_config["receiver_email"]
+APP_PASSWORD = email_config["app_password"]
 
 # ====================================
 # MONITORING FREQUENCY (in seconds)
 # ====================================
-CHECK_INTERVAL = 3600  # Check every 1 hour (3600 seconds)
-# For testing: use 60 for every 1 minute
+CHECK_INTERVAL = CHECK_INTERVAL_SECONDS  # From .env file
 
 def run_inventory_check():
     """
@@ -80,11 +90,11 @@ def run_inventory_check():
             status = data['Status']
             if status == "CRITICAL":
                 critical_count += 1
-                print(f"  🔴 {product}: {status} (Shortage: {data['Shortage']} units)")
+                print(f"  [CRITICAL] {product}: {status} (Shortage: {data['Shortage']} units)")
             elif status == "WARNING":
-                print(f"  🟡 {product}: {status} (Stock: {data['Current Stock']} units)")
+                print(f"  [WARNING] {product}: {status} (Stock: {data['Current Stock']} units)")
             else:
-                print(f"  🟢 {product}: {status}")
+                print(f"  [OK] {product}: {status}")
         
         print(f"\nTotal Critical Items: {critical_count}")
         
@@ -100,12 +110,12 @@ def run_inventory_check():
                 RECEIVER_EMAIL
             )
         else:
-            print("\n✓ No critical alerts - inventory levels are healthy")
+            print("\n[OK] No critical alerts - inventory levels are healthy")
         
         print(f"\nNext check scheduled for: ", end="")
         
     except Exception as e:
-        print(f"\n✗ Error during inventory check: {str(e)}")
+        print(f"\n[ERROR] Error during inventory check: {str(e)}")
         print("Attempting to send alert email about the error...")
         
         error_msg = f"""
