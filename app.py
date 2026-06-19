@@ -35,12 +35,6 @@ from src.inventory import (
 from src.email_alert import (
     send_stock_alert
 )
-from src.whatsapp_alert import (
-    send_whatsapp_alert
-)
-from src.whatsapp_alert import (
-    send_whatsapp_alert
-)
 
 from src.pdf_report import (
     generate_pdf
@@ -1196,35 +1190,7 @@ No action required.
 
 
 
-    # ==============================
-    # OPTION 2 WHATSAPP
-    # ==============================
-
-
-    st.subheader(
-        "📱 WhatsApp Alert Automation"
-    )
-
-
-
-    if st.button(
-        "📱 Send WhatsApp Alert"
-    ):
-
-
-        send_whatsapp_alert(
-            alert_message
-        )
-
-
-        st.success(
-            "WhatsApp message sent successfully!"
-        )
-
-
-
-    st.divider()
-
+    
 
 
     # ==============================
