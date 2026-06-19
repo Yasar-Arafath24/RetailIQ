@@ -1,5 +1,12 @@
 import streamlit as st
 import plotly.express as px
+from src.style import load_css
+st.set_page_config(
+    page_title="RetailIQ",
+    page_icon="📦",
+    layout="wide"
+)
+load_css()
 
 
 # ====================================
@@ -77,6 +84,45 @@ total_products = df["Product"].nunique()
 sales_summary = total_sales_per_product(df)
 
 daily_sales_data = daily_sales(df)
+# ====================================
+# EXECUTIVE KPI DATA
+# ====================================
+
+total_revenue = 0
+
+if "Revenue" in df.columns:
+
+    total_revenue = int(
+        df["Revenue"].sum()
+    )
+
+elif (
+    "Price" in df.columns
+    and
+    "Quantity" in df.columns
+):
+
+    total_revenue = int(
+        (
+            df["Price"]
+            *
+            df["Quantity"]
+        ).sum()
+    )
+
+inventory_health = 92
+
+critical_alerts = 0
+
+inventory_report = (
+    check_inventory_status()
+)
+
+for product, details in inventory_report.items():
+
+    if details["Status"] != "SAFE":
+
+        critical_alerts += 1
 
 # ====================================
 # AUTO DETECT COLUMN NAMES
@@ -113,8 +159,15 @@ else:
 # SIDEBAR
 # ====================================
 
-st.sidebar.title("📦 RetailIQ")
+st.sidebar.markdown(
+"""
+# 📦 RetailIQ
 
+### AI Inventory Intelligence
+
+---
+"""
+)
 st.sidebar.success(
     "RetailIQ v1.0"
 )
@@ -153,6 +206,7 @@ if page == "Home":
     st.divider()
 
     col1, col2, col3, col4 = st.columns(4)
+    
 
     with col1:
         st.metric(
@@ -658,12 +712,6 @@ elif page == "Purchase Orders":
             mime="text/csv"
         )
 
-# ====================================
-# BUSINESS INTELLIGENCE PAGE
-# ====================================
-# ====================================
-# BUSINESS INTELLIGENCE PAGE
-# ====================================
 # ====================================
 # BUSINESS INTELLIGENCE PAGE
 # ====================================
