@@ -23,3 +23,23 @@ Time: 9:58
 Phone Number: +919952610449
 Message: 🚨 RetailIQ Alert 🚨MilkShortage: 1635 unitsBreadShortage: 788 unitsRiceShortage: 188 unitsPurchase Order Required.
 --------------------
+Date: 19/6/2026
+Time: 16:22
+Phone Number: +916385748590
+Message: 🚨 RetailIQ AlertMilk shortage detected.Current Stock:100 unitsPurchase order required.
+--------------------
+Date: 19/6/2026
+Time: 16:24
+Phone Number: +919952610449
+Message: 🚨 RetailIQ AlertMilk shortage detected.Current Stock:100 unitsPurchase order required.
+--------------------
+Date: 19/6/2026
+Time: 16:28
+Phone Number: +919952610449
+Message: 🚨 RetailIQ Stock AlertProduct:BreadCurrent Stock:100Minimum Stock:150Status:CRITICALAction:Purchase Order Required---------------------
+--------------------
+Date: 19/6/2026
+Time: 16:28
+Phone Number: +919952610449
+Message: 🚨 RetailIQ Stock AlertProduct:BreadCurrent Stock:100Minimum Stock:150Status:CRITICALAction:Purchase Order Required---------------------
+--------------------

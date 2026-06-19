@@ -1,134 +1,152 @@
 import smtplib
+import os
+
 from email.message import EmailMessage
-from datetime import datetime
+from dotenv import load_dotenv
 
 
-def send_stock_alert(
-    risk_report,
-    sender_email,
-    app_password,
-    receiver_email
-):
-    """Send email alert for critical stock levels"""
-    
-    critical_products = []
+# ====================================
+# LOAD ENV FILE FROM PROJECT ROOT
+# ====================================
 
-    for product, data in (
-        risk_report.items()
-    ):
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
+)
 
-        if (
-            data["Status"]
-            ==
-            "CRITICAL"
-        ):
+ENV_PATH = os.path.join(
+    BASE_DIR,
+    ".env"
+)
 
-            critical_products.append(
 
-                f"{product} shortage: "
-                f"{data['Shortage']} units"
+load_dotenv(ENV_PATH)
 
-            )
 
-    if not critical_products:
+# ====================================
+# SEND STOCK ALERT EMAIL
+# ====================================
 
-        print(
-            "No critical stock alerts."
+def send_stock_alert(message):
+
+
+    sender = os.getenv(
+        "SENDER_EMAIL"
+    )
+
+    password = os.getenv(
+        "APP_PASSWORD"
+    )
+
+    receiver = os.getenv(
+        "RECEIVER_EMAIL"
+    )
+
+
+    print("======================")
+    print("ENV CHECK")
+    print("SENDER:", sender)
+    print("PASSWORD:", password)
+    print("RECEIVER:", receiver)
+    print("======================")
+
+
+    # ==========================
+    # VALIDATION
+    # ==========================
+
+    if not sender:
+
+        raise Exception(
+            "SENDER_EMAIL missing in .env"
         )
 
-        return False
+
+    if not password:
+
+        raise Exception(
+            "APP_PASSWORD missing in .env"
+        )
+
+
+    if not receiver:
+
+        raise Exception(
+            "RECEIVER_EMAIL missing in .env"
+        )
+
+
+    # Remove spaces from Gmail app password
+
+    password = password.replace(
+        " ",
+        ""
+    )
+
+
+    # ==========================
+    # CREATE EMAIL
+    # ==========================
+
+    email = EmailMessage()
+
+
+    email["From"] = sender
+
+    email["To"] = receiver
+
+    email["Subject"] = (
+        "RetailIQ Critical Stock Alert"
+    )
+
+
+    email.set_content(
+        message
+    )
+
+
+    # ==========================
+    # SEND EMAIL
+    # ==========================
 
     try:
-        msg = EmailMessage()
 
-        msg["Subject"] = (
-            "RetailIQ Critical Stock Alert - "
-            f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        )
-
-        msg["From"] = sender_email
-
-        msg["To"] = receiver_email
-
-        email_body = (
-            "CRITICAL STOCK ALERT\n"
-            "=" * 50 + "\n\n"
-            "The following products have critical shortage:\n\n"
-            + "\n".join(critical_products)
-            + "\n\n" + "=" * 50 + "\n"
-            + f"Alert Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-            + "RetailIQ Inventory Management System"
-        )
-
-        msg.set_content(email_body)
-
-        with smtplib.SMTP_SSL(
+        smtp = smtplib.SMTP_SSL(
             "smtp.gmail.com",
             465
-        ) as smtp:
+        )
 
-            smtp.login(
-                sender_email,
-                app_password
-            )
 
-            smtp.send_message(msg)
+        smtp.login(
+            sender,
+            password
+        )
+
+
+        smtp.send_message(
+            email
+        )
+
+
+        smtp.quit()
+
 
         print(
-            f"[SUCCESS] Email Alert Sent to {receiver_email}!"
+            "EMAIL SENT SUCCESSFULLY"
         )
-        
+
+
         return True
-        
+
+
     except Exception as e:
-        print(
-            f"[ERROR] Failed to send email: {str(e)}"
-        )
-        return False
 
-
-def send_daily_report(
-    sender_email,
-    app_password,
-    receiver_email,
-    report_content
-):
-    """Send daily inventory report email"""
-    
-    try:
-        msg = EmailMessage()
-
-        msg["Subject"] = (
-            f"RetailIQ Daily Report - "
-            f"{datetime.now().strftime('%Y-%m-%d')}"
-        )
-
-        msg["From"] = sender_email
-
-        msg["To"] = receiver_email
-
-        msg.set_content(report_content)
-
-        with smtplib.SMTP_SSL(
-            "smtp.gmail.com",
-            465
-        ) as smtp:
-
-            smtp.login(
-                sender_email,
-                app_password
-            )
-
-            smtp.send_message(msg)
 
         print(
-            f"[SUCCESS] Daily Report Sent to {receiver_email}!"
+            "EMAIL ERROR:",
+            e
         )
-        
-        return True
-        
-    except Exception as e:
-        print(
-            f"[ERROR] Failed to send report: {str(e)}"
-        )
-        return False
+
+
+        raise e

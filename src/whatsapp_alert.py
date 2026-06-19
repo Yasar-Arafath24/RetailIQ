@@ -1,48 +1,47 @@
 import pywhatkit
+import datetime
+import time
+import os
+
+from dotenv import load_dotenv
 
 
-def send_whatsapp_alert(
-    risk_report,
-    phone_number
-):
+load_dotenv()
 
-    critical_products = []
 
-    for product, data in risk_report.items():
 
-        if data["Status"] == "CRITICAL":
+def send_whatsapp_alert(message):
 
-            critical_products.append(
 
-                f"{product}\n"
-                f"Shortage: {data['Shortage']} units"
-
-            )
-
-    if not critical_products:
-
-        print(
-            "No critical products found."
-        )
-
-        return
-
-    message = (
-        "🚨 RetailIQ Alert 🚨\n\n"
-        + "\n\n".join(
-            critical_products
-        )
-        + "\n\nPurchase Order Required."
+    phone_number = os.getenv(
+        "VENDOR_PHONE"
     )
 
-    pywhatkit.sendwhatmsg_instantly(
+
+    if not phone_number:
+
+        raise Exception(
+            "Vendor WhatsApp number missing"
+        )
+
+
+    now = datetime.datetime.now()
+
+
+    hour = now.hour
+
+    minute = now.minute + 1
+
+
+    pywhatkit.sendwhatmsg(
         phone_number,
         message,
-        wait_time=15,
-        tab_close=True,
-        close_time=3
+        hour,
+        minute
     )
 
-    print(
-        "WhatsApp Alert Sent Successfully!"
-    )
+
+    time.sleep(5)
+
+
+    return True
